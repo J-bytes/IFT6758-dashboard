@@ -4,15 +4,9 @@ import pandas as pd
 from PIL import Image
 import plotly.express as px
 import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
-import ipywidgets
 import numpy as np
-import pandas as pd
-from PIL import Image
-import seaborn as sns
-import matplotlib.pyplot as plt
-from src.MileStone1.question_2 import data_manager
+import pandas as p
+from question_2 import data_manager
 
 def data_cleaner(df):
     side = df.groupby(['game_ID', 'team_info', 'period'], as_index=False)['coord_x'].mean()
