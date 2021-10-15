@@ -29,11 +29,11 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets)
 server = app.server
 
 server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets)
+
 app_color = {"graph_bg": "#082255", "graph_line": "#007ACE"}
 
 dm = data_manager("https://statsapi.web.nhl.com/api/v1/game/")
