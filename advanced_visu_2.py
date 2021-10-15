@@ -116,7 +116,7 @@ def shot_map(data,team_data) :
 
 
 if __name__=="__main__" :
-    dm = data_manager("https://statsapi.web.nhl.com/api/v1/game/",path="../../../")
+    dm = data_manager("https://statsapi.web.nhl.com/api/v1/game/")
     dm.load(2016)
     dm.load(2017)
     dm.load(2018)

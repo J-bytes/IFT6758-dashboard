@@ -34,7 +34,7 @@ class data_manager() :
 
 
         self.number_of_match=0
-        self.starting_dict={
+        self.starting_dict=dict({
 
             "event": [],
             "game_time": [],
@@ -55,12 +55,13 @@ class data_manager() :
             "game_number" : []
 
 
-        }
-        self.data=self.starting_dict
+        }.copy())
+        self.data=dict(self.starting_dict.copy())
         self.path=path
+        self.all_data=dict(self.starting_dict.copy())
 
     def to_DataFrame(self):
-        return pd.DataFrame(self.data)
+        return pd.DataFrame(self.all_data)
 
     def TidyData(self,dataset):
 
@@ -173,45 +174,48 @@ class data_manager() :
         return
 
     def clear(self):
-        self.data=self.starting_dict
+        self.alldata=dict(self.starting_dict.copy())
 
+    def load_online(self,path2, season):
+        # !!! verifier date pour 2021-2022
+        schedule_url = f"https://statsapi.web.nhl.com/api/v1/schedule?startDate={season}-10-01&endDate={season + 1}-09-30"
+        r = requests.get(schedule_url)
+        response = r.status_code
 
+        if response == 200:
+            tqdm.write("The server has been accessed succesfully")
+        elif response == 404:
+            raise Exception("Connection Error 404")
+        else:
+            raise Exception(f"error {r.status_code}")
+
+        schedule = r.json()
+
+        for date in tqdm(schedule["dates"], mininterval=1):
+            for game in date["games"]:
+                self.load_game(game["gamePk"], season)
+
+        pd.DataFrame(self.data).to_csv(path2, index=False)
+        return
     def load(self,season,reload=False):
+
         path2 = os.path.join(self.path,"data", "processed", f"{season}.csv")
-
-        def load_online(path2,season) :
-            #!!! verifier date pour 2021-2022
-            schedule_url = f"https://statsapi.web.nhl.com/api/v1/schedule?startDate={season}-10-01&endDate={season + 1}-09-30"
-            r = requests.get(schedule_url)
-            response = r.status_code
-
-            if response == 200:
-                tqdm.write("The server has been accessed succesfully")
-            elif response == 404:
-                raise Exception("Connection Error 404")
-            else:
-                raise Exception(f"error {r.status_code}")
-
-            schedule = r.json()
-
-            for date in tqdm(schedule["dates"], mininterval=1):
-                for game in date["games"]:
-                    self.load_game(game["gamePk"])
-
-
-            self.to_DataFrame().to_csv(path2, index = False)
 
         if not reload :
             if os.path.isfile(path2) :
                 self.data=pd.read_csv(path2)
             else :
-                load_online(path2,season)
+                self.load_online(path2,season)
         else :
-            load_online(path2, season)
+            self.load_online(path2, season)
 
 
+        for k, v in self.data.items():
+            self.all_data[k] += v
 
-    def load_game(self,game_ID):
+        for k, v in self.data.items():
+            self.data[k] =[]
+    def load_game(self,game_ID,season):
         """
 
         :param game_ID: The game_ID which identifies a particular game.
@@ -230,21 +234,15 @@ class data_manager() :
             self.TidyData(dataset)
 
 
-
-
-
-
-
-
         return
 
 if __name__=="__main__" :
         dm= data_manager("https://statsapi.web.nhl.com/api/v1/game/")
         dm.load(2016, reload=True)
-        #dm.load(2017,reload=True)
-        #dm.load(2018,reload=True)
-        #dm.load(2019,reload=True)
-        #dm.load(2020,reload=True)
+        dm.load(2017,reload=True)
+        dm.load(2018,reload=True)
+        dm.load(2019,reload=True)
+        dm.load(2020,reload=True)
 
         #print(dm.to_DataFrame().head(10))
 """
