@@ -43,7 +43,7 @@ dm.load(2016)
 #dm.load(2020)
 data=dm.to_DataFrame()
 
-global_data["team_data"]=data_cleaner(data)
+global_data["team_data"],team_dict=data_cleaner(data)
 del data
 fig1 = shot_map(global_data["team_data"])
 
@@ -122,7 +122,7 @@ def update_dropdown(season,team):
 
     dm.load(int(season))
     team_data = dm.to_DataFrame()
-    team_data = data_cleaner(team_data)
+    team_data,team_dict = data_cleaner(team_data)
 
     global_data["team_data"]=team_data
     
@@ -134,7 +134,7 @@ def update_dropdown(season,team):
     option_list=[]
     for i in list_teams :
         option_list.append(
-            {"label" : i , "value" : i}
+            {"label" : team_dict[str(i)] , "value" :i}
         )
     option_list.append( {"label" : "ALL" , "value" : "all"})
     
@@ -162,4 +162,4 @@ def update_figure(season,team):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False,port="8839")
+    app.run_server(debug=False,port="8849")

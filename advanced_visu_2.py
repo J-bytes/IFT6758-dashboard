@@ -29,7 +29,12 @@ def data_cleaner(data) :
     
     del data
     team_data=team_data[["coord_x","coord_y","team_info"]]
-    return team_data
+    teams=team_data["team_info"].unique()
+    team_dict={}
+    for (ex,j) in enumerate(teams) :
+        team_dict[str(ex)]=j
+        team_data["team_info"][team_data["team_info"]==j]=ex
+    return team_data,team_dict
 
 
 def shot_map(team_data) :
@@ -97,7 +102,7 @@ if __name__=="__main__" :
     dm.load(2019)
     dm.load(2020)
     data=dm.to_DataFrame()
-    team_data=data_cleaner(data)
+    team_data,team_dict=data_cleaner(data)
     
     fig2=shot_map(team_data)
     fig2.show()
