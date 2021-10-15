@@ -174,7 +174,7 @@ class data_manager() :
         return
 
     def clear(self):
-        for (k,v) in self.all_data :
+        for (k,v) in self.all_data.items() :
             self.all_data[k]=[]
 
     def load_online(self,path2, season):
@@ -243,8 +243,10 @@ class data_manager() :
 if __name__=="__main__" :
         dm= data_manager("https://statsapi.web.nhl.com/api/v1/game/")
         dm.load(2016)
+        dm.clear()
         dm.load(2017)
         dm.load(2018)
+        dm.clear()
         dm.load(2019)
         dm.load(2020)
 
