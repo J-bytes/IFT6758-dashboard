@@ -42,15 +42,15 @@ dm.load(2016)
 #dm.load(2019)
 #dm.load(2020)
 data=dm.to_DataFrame()
-data,team_data=data_cleaner(data)
-global_data["data"]=data
-global_data["team_data"]=team_data
-fig1 = shot_map(data,team_data)
+
+global_data["team_data"]=data_cleaner(data)
+del data
+fig1 = shot_map(global_data["team_data"])
 
 
 
 
-list_teams = team_data[team_data["season"]==2016]["team_info"].unique()
+list_teams = global_data["team_data"][global_data["team_data"]["season"]==2016]["team_info"].unique()
 option_list = []
 for i in list_teams:
     option_list.append(
@@ -66,7 +66,8 @@ app.layout = html.Div(children=[
         dcc.Graph(
         id='graph',
         animate=False,
-        figure=fig1
+        figure=fig1,
+     
     )],
         className="six columns"),
     ]),
@@ -120,18 +121,21 @@ def update_dropdown(season,team):
 
     dm.load(int(season))
     data = dm.to_DataFrame()
-    data, team_data = data_cleaner(data)
+    team_data = data_cleaner(data)
+    del data
     global_data["team_data"]=team_data
-    global_data["data"]=data
-    fig1 = shot_map(data, team_data)
-    team_data2 = team_data[team_data["season"] == season]
-    list_teams = team_data2["team_info"].unique()
+    
+    fig1 = shot_map(team_data)
+    team_data = team_data[team_data["season"] == season]
+
+    list_teams = team_data["team_info"].unique()
+    
     option_list=[]
     for i in list_teams :
         option_list.append(
             {"label" : i , "value" : i}
         )
-
+    
     return [option_list]
 
 
@@ -143,15 +147,15 @@ def update_dropdown(season,team):
 
 def update_figure(season,team):
     team_data=global_data["team_data"]
-    data=global_data["data"] 
+    
 
     if team=="all" :
-        team_data2=team_data[team_data["season"]==season]
+        team_data=team_data[team_data["season"]==season]
 
     else :
         specific_season=team_data[team_data["season"] == season]
-        team_data2 = specific_season[specific_season["team_info"]==team]
-    fig = shot_map(data, team_data2)
+        team_data = specific_season[specific_season["team_info"]==team]
+    fig = shot_map(team_data)
     return [fig]
 
 

@@ -25,50 +25,20 @@ def data_cleaner(data) :
     team_data=data
     team_data["coord_x"] = team_data["coord_x"].add(100)
     team_data["coord_y"] = team_data["coord_y"].add(42.5)
-    return data,team_data
+    return team_data
 
 
-#utile plus tard ?
-"""
-team_total_shots = len(team_data)
-team_goal_percentage = len(team_data[team_data.event == 'Goal'])/team_total_shots
-league_total_shots = len(data)
-league_goal_percentage = len(data[data.event == 'Goal'] )/league_total_shots
-"""
-
-def shot_map(data,team_data) :
+def shot_map(team_data) :
     img = Image.open('./figures/nhl_rink.png')
     width, height = img.size
 
     scale_x=200/width
     scale_y=85/height
     scale_factor=0.5*(scale_x+scale_y)
-    """
-    fig = plt.figure(figsize=(width/96, height/96), dpi = 96)
 
-    ax = fig.add_subplot(111, frameon=False, xticks=[], yticks=[])
-    ax_extent = [-100,100,-42,42]
-
-    plt.imshow(img, extent=ax_extent)
-    sns.set_style("white")
-    sns.kdeplot(x = team_data.coord_x,y =  team_data.coord_y, cmap="Reds", shade=True, alpha=0.4)
-    
-    #sns.kdeplot(x = crop.coord_x,y =  crop.coord_y, cmap="Blues", shade=True, alpha=0.4)
-    ### La moyenne doit etre calculee mais je ne suis pas certain de la maniere de proceder...
-    ### faudrait peut-etre quadriller la zone...
-
-
-    ## Il faut encore faire la rotation de 90° et le crop pour avoir seulement la zone offensive
-    plt.savefig('./figures/shot_map_beta.png')
-    """
     import plotly.express as px
     import plotly.graph_objects as go
 
-
-    xx=np.min(team_data["coord_x"])
-    xx2=np.max(team_data["coord_x"])
-    yy=np.min(team_data["coord_y"])
-    yy2=np.max(team_data["coord_y"])
 
     fig2=px.density_contour(x=team_data["coord_x"],y=team_data["coord_y"],width=width, height=height)
 
@@ -123,6 +93,7 @@ if __name__=="__main__" :
     dm.load(2019)
     dm.load(2020)
     data=dm.to_DataFrame()
-    data,team_data=data_cleaner(data)
-    fig2=shot_map(data,team_data)
+    team_data=data_cleaner(data)
+    
+    fig2=shot_map(team_data)
     fig2.show()
