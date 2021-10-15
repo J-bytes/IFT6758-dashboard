@@ -50,12 +50,13 @@ fig1 = shot_map(global_data["team_data"])
 
 
 
-list_teams = global_data["team_data"][global_data["team_data"]["season"]==2016]["team_info"].unique()
+list_teams = global_data["team_data"]["team_info"].unique()
 option_list = []
 for i in list_teams:
     option_list.append(
         {"label": i, "value": i}
     )
+option_list.append( {"label" : "ALL" , "value" : "all"})
 first_team=option_list[0]["value"]
 
 app.layout = html.Div(children=[
@@ -135,6 +136,7 @@ def update_dropdown(season,team):
         option_list.append(
             {"label" : i , "value" : i}
         )
+    option_list.append( {"label" : "ALL" , "value" : "all"})
     
     return [option_list]
 
@@ -149,16 +151,15 @@ def update_figure(season,team):
     team_data=global_data["team_data"]
     
 
-    if team=="all" :
-        team_data=team_data[team_data["season"]==season]
+    if team!="all" :
 
-    else :
-        specific_season=team_data[team_data["season"] == season]
-        team_data = specific_season[specific_season["team_info"]==team]
+        team_data = team_data[team_data["team_info"] == team]
+
+     
     fig = shot_map(team_data)
     return [fig]
 
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False,port="8889")
+    app.run_server(debug=False,port="8829")
