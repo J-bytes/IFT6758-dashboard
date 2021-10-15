@@ -195,7 +195,8 @@ class data_manager() :
             for game in date["games"]:
                 self.load_game(game["gamePk"], season)
 
-        pd.DataFrame(self.data).to_csv(path2, index=False)
+        copy=dict(self.data.copy())
+        pd.DataFrame(copy).to_csv(path2, index=False)
         return
     def load(self,season,reload=False):
 
@@ -211,8 +212,10 @@ class data_manager() :
 
 
         for k, v in self.data.items():
-            self.all_data[k] += v
+            self.all_data[k].extend(v)
 
+        if type(self.data)!=dict : #pandas converts it to a dataframe without my permisssion
+            self.data=self.data.to_dict()
         for k, v in self.data.items():
             self.data[k] =[]
     def load_game(self,game_ID,season):
@@ -238,11 +241,11 @@ class data_manager() :
 
 if __name__=="__main__" :
         dm= data_manager("https://statsapi.web.nhl.com/api/v1/game/")
-        dm.load(2016, reload=True)
-        dm.load(2017,reload=True)
-        dm.load(2018,reload=True)
-        dm.load(2019,reload=True)
-        dm.load(2020,reload=True)
+        dm.load(2016)
+        dm.load(2017)
+        dm.load(2018)
+        dm.load(2019)
+        dm.load(2020)
 
         #print(dm.to_DataFrame().head(10))
 """
