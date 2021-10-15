@@ -34,7 +34,7 @@ server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
 app = dash.Dash(__name__, server=server, external_stylesheets=external_stylesheets)
 app_color = {"graph_bg": "#082255", "graph_line": "#007ACE"}
 
-
+global_data={}
 dm = data_manager("https://statsapi.web.nhl.com/api/v1/game/")
 dm.load(2016)
 #dm.load(2017)
@@ -43,6 +43,8 @@ dm.load(2016)
 #dm.load(2020)
 data=dm.to_DataFrame()
 data,team_data=data_cleaner(data)
+global_data["data"]=data
+global_data["team_data"]=team_data
 fig1 = shot_map(data,team_data)
 
 
@@ -119,6 +121,8 @@ def update_dropdown(season,team):
     dm.load(int(season))
     data = dm.to_DataFrame()
     data, team_data = data_cleaner(data)
+    global_data["team_data"]=team_data
+    global_data["data"]=data
     fig1 = shot_map(data, team_data)
     team_data2 = team_data[team_data["season"] == season]
     list_teams = team_data2["team_info"].unique()
@@ -138,6 +142,8 @@ def update_dropdown(season,team):
     ])
 
 def update_figure(season,team):
+    team_data=global_data["team_data"]
+    data=global_data["data"] 
 
     if team=="all" :
         team_data2=team_data[team_data["season"]==season]
@@ -151,4 +157,4 @@ def update_figure(season,team):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=False,port="8889")
