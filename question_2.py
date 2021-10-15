@@ -174,7 +174,8 @@ class data_manager() :
         return
 
     def clear(self):
-        self.alldata=dict(self.starting_dict.copy())
+        for (k,v) in self.all_data :
+            self.all_data[k]=[]
 
     def load_online(self,path2, season):
         # !!! verifier date pour 2021-2022

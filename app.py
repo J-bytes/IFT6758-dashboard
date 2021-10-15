@@ -136,7 +136,7 @@ def update_dropdown(season,team):
         option_list.append(
             {"label" : team_dict[str(i)] , "value" :i}
         )
-    option_list.append( {"label" : "ALL" , "value" : "all"})
+    option_list.append( {"label" : "ALL" , "value" : "all"} )
     
     return [option_list]
 
