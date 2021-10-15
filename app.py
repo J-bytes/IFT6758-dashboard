@@ -162,4 +162,4 @@ def update_figure(season,team):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False,port="8829")
+    app.run_server(debug=False,port="8839")

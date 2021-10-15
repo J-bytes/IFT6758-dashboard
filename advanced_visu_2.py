@@ -10,6 +10,7 @@ from question_2 import data_manager
 
 
 def data_cleaner(data) :
+    data=data[data["game_type"]=="regular"]
     side = data.groupby(['game_ID', 'team_info', 'period'], as_index=False)['coord_x'].mean()
     side['side'] = np.where(side.coord_x < 0, -1, 1)
     data = pd.merge(data, side[['game_ID', 'team_info', 'period', 'side']],
@@ -25,6 +26,7 @@ def data_cleaner(data) :
     team_data=data
     team_data["coord_x"] = team_data["coord_x"].add(100)
     team_data["coord_y"] = team_data["coord_y"].add(42.5)
+    
     del data
     team_data=team_data[["coord_x","coord_y","team_info"]]
     return team_data
