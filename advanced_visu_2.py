@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 from PIL import Image
-import seaborn as sns
+
 import matplotlib.pyplot as plt
 from src.MileStone1.question_2 import data_manager
 
