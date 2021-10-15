@@ -120,13 +120,13 @@ def update_dropdown(season,team):
     dm.clear()
 
     dm.load(int(season))
-    data = dm.to_DataFrame()
-    team_data = data_cleaner(data)
-    del data
+    team_data = dm.to_DataFrame()
+    team_data = data_cleaner(team_data)
+
     global_data["team_data"]=team_data
     
     fig1 = shot_map(team_data)
-    team_data = team_data[team_data["season"] == season]
+
 
     list_teams = team_data["team_info"].unique()
     

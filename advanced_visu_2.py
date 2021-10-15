@@ -25,6 +25,8 @@ def data_cleaner(data) :
     team_data=data
     team_data["coord_x"] = team_data["coord_x"].add(100)
     team_data["coord_y"] = team_data["coord_y"].add(42.5)
+    del data
+    team_data=team_data[["coord_x","coord_y","team_info"]]
     return team_data
 
 
