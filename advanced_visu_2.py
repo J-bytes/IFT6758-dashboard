@@ -4,7 +4,7 @@ import pandas as pd
 from PIL import Image
 
 import matplotlib.pyplot as plt
-from src.MileStone1.question_2 import data_manager
+from question_2 import data_manager
 
 
 
