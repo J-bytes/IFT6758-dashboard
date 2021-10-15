@@ -119,18 +119,14 @@ app.layout = html.Div(children=[
 
 def update_dropdown(season,team):
     dm.clear()
-
     dm.load(int(season))
     team_data = dm.to_DataFrame()
-    team_data,team_dict = data_cleaner(team_data)
+    team_data,_ = data_cleaner(team_data)
 
     global_data["team_data"]=team_data
     
     fig1 = shot_map(team_data)
 
-
-    list_teams = team_data["team_info"].unique()
-    
     option_list=[]
     for i in list_teams :
         option_list.append(
