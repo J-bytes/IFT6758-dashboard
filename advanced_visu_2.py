@@ -82,6 +82,7 @@ def shot_map(team_data) :
 
 
     fig2.update_layout(
+        hovermode="closest",
         width=width,
         height=height,
         margin={"l": 0, "r": 0, "t": 0, "b": 0},
