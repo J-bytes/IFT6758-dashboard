@@ -37,10 +37,10 @@ app_color = {"graph_bg": "#082255", "graph_line": "#007ACE"}
 
 dm = data_manager("https://statsapi.web.nhl.com/api/v1/game/")
 dm.load(2016)
-dm.load(2017)
-dm.load(2018)
-dm.load(2019)
-dm.load(2020)
+#dm.load(2017)
+#dm.load(2018)
+#dm.load(2019)
+#dm.load(2020)
 data=dm.to_DataFrame()
 data,team_data=data_cleaner(data)
 fig1 = shot_map(data,team_data)
@@ -114,6 +114,12 @@ app.layout = html.Div(children=[
     ])
 
 def update_dropdown(season,team):
+    dm.clear()
+
+    dm.load(int(season))
+    data = dm.to_DataFrame()
+    data, team_data = data_cleaner(data)
+    fig1 = shot_map(data, team_data)
     team_data2 = team_data[team_data["season"] == season]
     list_teams = team_data2["team_info"].unique()
     option_list=[]
