@@ -10,8 +10,8 @@ from random import randint
 import numpy as np
 import flask
 
-from advanced_visu_2 import data_cleaner
-from advanced_visu_2 import shot_map
+from team_shot import data_cleaner
+from team_shot import shot_map
 from question_2 import data_manager
 import plotly.express as px
 
@@ -38,7 +38,7 @@ global_data={}
 dm = data_manager("https://statsapi.web.nhl.com/api/v1/game/")
 fig1=[]
 option_list=[]
-"""
+
 dm.load(2016)
 #dm.load(2017)
 #dm.load(2018)
@@ -46,7 +46,7 @@ dm.load(2016)
 #dm.load(2020)
 data=dm.to_DataFrame()
 
-global_data["team_data"],team_dict=data_cleaner(data)
+global_data["team_data"]=data_cleaner(data)
 del data
 fig1 = shot_map(global_data["team_data"])
 
@@ -61,9 +61,9 @@ for i in list_teams:
     )
 option_list.append( {"label" : "ALL" , "value" : "all"})
 first_team=option_list[0]["value"]
-"""
+
 app.layout = html.Div(children=[
-    html.H1(''),
+
 
     html.Div(children=[
     html.Div(children=[
@@ -124,7 +124,7 @@ def update_dropdown(season,team):
     dm.clear()
     dm.load(int(season))
     team_data = dm.to_DataFrame()
-    team_data,team_dict = data_cleaner(team_data)
+    team_data= data_cleaner(team_data)
 
     global_data["team_data"]=team_data
     
@@ -134,7 +134,7 @@ def update_dropdown(season,team):
     list_teams=team_data["team_info"].unique()
     for i in list_teams :
         option_list.append(
-            {"label" : team_dict[str(i)] , "value" :i}
+            {"label" : i, "value" :i}
         )
     option_list.append( {"label" : "ALL" , "value" : "all"} )
     
@@ -152,7 +152,6 @@ def update_figure(season,team):
     
 
     if team!="all" :
-
         team_data = team_data[team_data["team_info"] == team]
 
      
